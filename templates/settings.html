@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ドローン風速通知 設定</title>
+</head>
+<body>
+  <h1>設定変更</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}
+        <p style="color: green;">{{ msg }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+    <fieldset>
+      <legend>API情報</legend>
+      <label>Tomorrow.io API Key:<br>
+        <input name="tomorrow_api_key" type="text" value="{{ config.tomorrow_api_key }}" size="40">
+      </label><br>
+      <label>Pushover App Token:<br>
+        <input name="pushover_app_token" type="text" value="{{ config.pushover_app_token }}" size="40">
+      </label><br>
+      <label>Pushover User Key:<br>
+        <input name="pushover_user_key" type="text" value="{{ config.pushover_user_key }}" size="40">
+      </label><br>
+    </fieldset>
+    <fieldset>
+      <legend>飛行設定</legend>
+      <label>緯度: <input name="lat" value="{{ config.lat }}"></label><br>
+      <label>経度: <input name="lon" value="{{ config.lon }}"></label><br>
+      <label>高度(m): <input name="alt" type="number" value="{{ config.alt }}"></label><br>
+      <fieldset>
+        <legend>通知曜日</legend>
+        {% for d,label in [('mon','月'),('tue','火'),('wed','水'),('thu','木'),('fri','金'),('sat','土'),('sun','日')] %}
+          <label><input type="checkbox" name="days" value="{{ d }}" {% if d in config.days %}checked{% endif %}>{{ label }}</label>
+        {% endfor %}
+      </fieldset>
+      <label>通知時刻: <input name="time" type="time" value="{{ config.time }}"></label><br>
+    </fieldset>
+    <button type="submit">保存</button>
+  </form>
+  <!-- テスト実行ボタン -->
+  <form method="post" action="/test" style="margin-top:1em;">
+    <button type="submit">テスト実行</button>
+  </form>
+  <p><a href="/">ダッシュボードへ戻る</a></p>
+</body>
+</html>

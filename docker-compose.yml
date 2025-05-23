@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  drone-wind:
+    build: .
+    container_name: drone-wind-notify
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+

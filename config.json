@@ -1,0 +1,10 @@
+{
+  "tomorrow_api_key": "",
+  "pushover_app_token": "",
+  "pushover_user_key": "",
+  "lat": 35.6895,
+  "lon": 139.6917,
+  "alt": 100,
+  "days": ["mon", "thu"],
+  "time": "07:30"
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ドローン風速通知 ダッシュボード</title>
+</head>
+<body>
+  <h1>現在の風況</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}
+        <p style="color: red;">{{ msg }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% if wind_speed is not none and wind_dir is not none %}
+    <p>高度 {{ config.alt }} m の風速: {{ wind_speed }} m/s, 風向: {{ wind_dir }}°</p>
+  {% else %}
+    <p>風況データを取得できませんでした。</p>
+  {% endif %}
+
+  <h2>現在の設定</h2>
+  <ul>
+    <li>緯度: {{ config.lat }}</li>
+    <li>経度: {{ config.lon }}</li>
+    <li>高度: {{ config.alt }} m</li>
+    <li>通知曜日: {{ config.days | join(', ') }}</li>
+    <li>通知時刻: {{ config.time }}</li>
+  </ul>
+
+  <a href="/settings">設定変更へ</a>
+</body>
+</html>
