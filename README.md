@@ -37,7 +37,7 @@
 1. リポジトリをクローン
 
    ```bash
-   git clone <リポジトリURL>
+   git clone git@github.com:yoshinari1356/flask_wind_watcher.git
    cd python_wind_watcher
    ```
 
