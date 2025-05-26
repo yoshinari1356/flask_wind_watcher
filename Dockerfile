@@ -3,7 +3,6 @@ FROM python:3.10-slim
 # 作業ディレクトリ
 WORKDIR /app
 ENV PYTHONPATH=/app
-
 # cron は不要なら省略可能
 RUN apt-get update && apt-get install -y cron && rm -rf /var/lib/apt/lists/*
 

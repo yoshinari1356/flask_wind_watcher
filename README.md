@@ -41,45 +41,36 @@
    cd python_wind_watcher
    ```
 
-2. Dockerイメージをビルド
+2. 実行方法
 
    ```bash
-   docker build -t drone-flask-app .
+   docker compose up
    ```
 
-## 実行方法
-
-### Dockerで起動
-
-```bash
-docker run -d -p 5000:5000 drone-flask-app
-```
 
 ## 利用サービスと必要なトークン
 
 * Tomorrow.io API
   * 風況（風速・風向）取得用
-    * 環境変数または config.json に tomorrow_api_key を設定
 
 * Pushover
   * プッシュ通知用
-    * config.json に pushover_app_token（アプリトークン）および pushover_user_key（ユーザーキー）を設定
 
 ## TODOリスト
 
-1. UIをreactに変更
-2. 地図表示との連携による地点選択UIの実装
-3. 風向のビジュアル化（矢印アイコン／コンパスローズ表示）
-4. 過去・予報データのグラフ化および履歴管理（SQLite/PostgreSQL対応）
-5. 通知チャネルの拡張（Slack, Telegram, Email, Webhook など）
-6. ユーザー認証・マルチユーザー対応機能の追加
-7. 運行ログと履歴エクスポート（CSV/DB, ロギング基盤連携）
-8. テスト・CI/CDパイプライン構築（自動テスト・ビルド・デプロイ）
-9. Docker/Kubernetes 運用強化（Helm, ロギング, モニタリング）
-10. 多言語化・ローカライズ対応
-11. モバイル対応／PWA化
-12. アクセシビリティ改善（ダークモード, スクリーンリーダー対応など）
-13. APIキャッシュおよびレート制限管理
+- [ ] UIをreactに変更
+- [ ] 地図表示との連携による地点選択UIの実装
+- [ ] 風向のビジュアル化（矢印アイコン／コンパスローズ表示）
+- [ ] 過去・予報データのグラフ化および履歴管理（SQLite/PostgreSQL対応）
+- [ ] 通知チャネルの拡張（Slack, Telegram, Email, Webhook など）
+- [ ] ユーザー認証・マルチユーザー対応機能の追加
+- [ ] 運行ログと履歴エクスポート（CSV/DB, ロギング基盤連携）
+- [ ] テスト・CI/CDパイプライン構築（自動テスト・ビルド・デプロイ）
+- [ ] Docker/Kubernetes 運用強化（Helm, ロギング, モニタリング）
+- [ ] 多言語化・ローカライズ対応
+- [ ] モバイル対応／PWA化
+- [ ] アクセシビリティ改善（ダークモード, スクリーンリーダー対応など）
+- [ ] APIキャッシュおよびレート制限管理
 
 ---
 

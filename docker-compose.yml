@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    ports:
+      - "5001:5000"
+    # depends_on:
+    #   - db  # dbサービスに依存
+
+  # db:
+  #   image: postgres:latest  # PostgreSQLの最新イメージを使用
+  #   environment:
+  #     POSTGRES_DB: your_database_name
+  #     POSTGRES_USER: your_username
+  #     POSTGRES_PASSWORD: your_password
+  #   ports:
+  #     - "5432:5432"
