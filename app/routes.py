@@ -1,6 +1,6 @@
 import os
 import json
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, request, redirect, url_for, flash, jsonify, current_app
 from .jobs import fetch_wind, notify_job, schedule_jobs
 from .config import load_config
 
@@ -8,6 +8,7 @@ def register_routes(app):
 
     @app.route('/')
     def dashboard():
+        current_app.logger.info('dashboard')
         cfg = load_config()
         try:
             ws, wd = fetch_wind()
@@ -18,6 +19,7 @@ def register_routes(app):
 
     @app.route('/settings', methods=['GET', 'POST'])
     def settings():
+        current_app.logger.info('settings')
         if request.method == 'POST':
             cfg = {
                 'tomorrow_api_key': request.form['tomorrow_api_key'],
@@ -39,6 +41,7 @@ def register_routes(app):
 
     @app.route('/test', methods=['POST'])
     def test_execution():
+        current_app.logger.info('test_execution')
         try:
             notify_job()
             flash('テスト通知を送信しました')
@@ -49,6 +52,7 @@ def register_routes(app):
     # API
     @app.route('/api/routes', methods=['GET'])
     def list_routes():
+        current_app.logger.info('list_routes')
         routes = []
         for rule in app.url_map.iter_rules():
             routes.append({
@@ -60,47 +64,56 @@ def register_routes(app):
 
     @app.route('/api/settings', methods=['GET', 'POST'])
     def api_settings():
-        print(f"api_settings called with method: {request.method}")
+        current_app.logger.info(f"api_settings called with method: {request.method}")
         if request.method == 'POST':
-            print("Processing POST request")
+            current_app.logger.info("Processing POST request")
             try:
+                data = request.get_json()  # JSONデータを取得
+                current_app.logger.info("1")
+                if data is None:
+                    current_app.logger.info("err 1")
+                    return {"error": "Invalid JSON"}, 400  # JSONが無効な場合のエラーレスポンス
+
+                current_app.logger.info(data)
+                # if 'required_field' not in data:
+                #     current_app.logger.info("err 2")
+                #     return {"error": "Required field 'required_field' is missing"}, 400
+
                 cfg = {
-                    'tomorrow_api_key': request.form['tomorrow_api_key'],
-                    'pushover_app_token': request.form['pushover_app_token'],
-                    'pushover_user_key': request.form['pushover_user_key'],
-                    'lat': float(request.form['lat']),
-                    'lon': float(request.form['lon']),
-                    'alt': int(request.form['alt']),
-                    'days': request.form.getlist('days'),
-                    'time': request.form['time']
+                    'tomorrow_api_key': data['tomorrow_api_key'],
+                    'pushover_app_token': data['pushover_app_token'],
+                    'pushover_user_key': data['pushover_user_key'],
+                    'lat': float(data['lat']),
+                    'lon': float(data['lon']),
+                    'alt': int(data['alt']),
+                    'days': data['days'],
+                    'time': data['time']
                 }
-                print(f"Received config: {cfg}")
 
                 with open('config.json', 'w') as f:
                     json.dump(cfg, f, indent=2)
-                print("Config saved to file")
 
                 schedule_jobs()
-                print("Jobs rescheduled")
 
                 return jsonify({"message": "Settings updated successfully"})
             except Exception as e:
-                print(f"Error in POST processing: {str(e)}")
+                current_app.logger.debug(f"Error in POST processing: {str(e)}")
                 return jsonify({"error": str(e)}), 500
         else:
-            print("Processing GET request")
+            current_app.logger.info("Processing GET request")
             try:
                 cfg = load_config()
-                print(f"Loaded config: {cfg}")
                 return jsonify(cfg)
             except Exception as e:
-                print(f"Error loading config: {str(e)}")
+                current_app.logger.debug(f"Error loading config: {str(e)}")
                 return jsonify({"error": str(e)}), 500
 
     @app.route('/api/wind', methods=['GET'])
     def api_wind():
+        current_app.logger.info('api_wind')
         try:
             ws, wd = fetch_wind()
             return jsonify({'wind_speed': ws, 'wind_dir': wd})
         except Exception as e:
+            current_app.logger.debug(f"Error in api_wind: {str(e)}")
             return jsonify({'error': str(e)}), 500
